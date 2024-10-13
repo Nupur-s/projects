@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter, Routes, Route, Navigate}from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Inventory from './components/Inventory';
+import Buy from './components/Buy';
+import Login from './components/Login';
+import AuthProvider, { authContext, useAuth } from './components/AuthContext';
+
+function AuthenticatedRoute({children}){
+  const authContext = useAuth();
+  if(authContext.authenticated){
+    return children;
+  }
+
+  return <Navigate to="/"></Navigate>
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/inventory" element ={<AuthenticatedRoute><Inventory /></AuthenticatedRoute>}></Route>
+        <Route path="/buy" element ={<AuthenticatedRoute><Buy /></AuthenticatedRoute>}></Route>
+        <Route path="/" element ={<Login/>}></Route>
+      </Routes>
+    </BrowserRouter>
+    </AuthProvider>
+
     </div>
   );
 }
