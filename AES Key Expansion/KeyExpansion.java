@@ -68,9 +68,9 @@ public class KeyExpansion {
     public static String[] gFunction(String[] word, int round){
         String[] Rcon = {"01","02","04","08","10","20","40","80","1B","36"};
 
-        cyclicShift(word);
-        subWord(word);
-        xorRcon(Rcon[round],word);
+        word = cyclicShift(word);
+        word = subWord(word);
+        word = xorRcon(Rcon[round],word);
 
         return word;
     }
